@@ -1,0 +1,9 @@
+
+docker run -d --rm --name pg -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=docker postgres
+docker exec -it pg bash
+createdb gocryptotrader -E 'UTF8'
+
+postgres://root:docker@localhost:5432/gocryptotrader?ssl_mode=disable
+
+migrate create -ext sql -dir migrations -seq ticker
+migrate -path migrations -database postgres://root:docker@localhost:5432/gocryptotrader?sslmode=disable up
