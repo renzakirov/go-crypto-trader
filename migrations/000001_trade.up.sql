@@ -4,9 +4,11 @@ CREATE TABLE IF NOT EXISTS operation_type(
   description VARCHAR (300)
 );
 
+INSERT INTO operation_type(operation_type_name, description) VALUES ('sell', 'sell curency'), ('buy', 'buy curency');
+
 CREATE TABLE IF NOT EXISTS trade (
-  trade_id serial not null PRIMARY key,
-  id integer,
+  id serial not null PRIMARY key,
+  trade_id integer UNIQUE not null,
   operation_type_id integer not null REFERENCES operation_type(id),
   price numeric,
   quantity numeric,

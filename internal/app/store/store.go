@@ -1,15 +1,16 @@
 package store
 
 import (
-	"context"
-
-	"github.com/jackc/pgx"
+	_ "github.com/jackc/pgx/stdlib" // pgx
+	"github.com/jmoiron/sqlx"
 )
 
 // Store ...
 type Store struct {
 	config *Config
-	db     *pgx.Conn
+	db     *sqlx.DB
+
+	TradeRepo *TradeRepo
 }
 
 // New ...
@@ -21,15 +22,7 @@ func New(config *Config) *Store {
 
 // Open ...
 func (s *Store) Open() error {
-	config, err := pgx.ParseConnectionString(s.config.DatabaseURL)
-	if err != nil {
-		return err
-	}
-	db, err := pgx.Connect(config)
-	if err != nil {
-		return err
-	}
-	err = db.Ping(context.Background())
+	db, err := sqlx.Connect("pgx", "postgres://root:docker@localhost:5432/gocryptotrader?sslmode=disable") // s.config.DatabaseURL)
 	if err != nil {
 		return err
 	}
@@ -40,4 +33,14 @@ func (s *Store) Open() error {
 // Close ...
 func (s *Store) Close() {
 	s.db.Close()
+}
+
+func (s *Store) Trade() *TradeRepo {
+	if s.TradeRepo != nil {
+		return s.TradeRepo
+	}
+	s.TradeRepo = &TradeRepo{
+		store: s,
+	}
+	return s.TradeRepo
 }

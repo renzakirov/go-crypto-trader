@@ -29,16 +29,23 @@ type OrderBookResponse struct {
 }
 
 // TradesResponse ...
-type TradesResponse struct {
-	BTCUSD []TradeElements
+type TradesResponse map[string]TradeElement
+
+// TradeElement ...
+type TradeElement struct {
+	ID       int64  `json:"id" db:"id"`
+	TradeID  int64  `json:"trade_id" db:"trade_id"`
+	TypeID   int64  `json:"type_id" db:"operation_type_id"`
+	Type     string `json:"type" db:"-"`
+	Price    string `json:"price" db:"price"`
+	Quantity string `json:"quantity" db:"quantity"`
+	Amount   string `json:"amount" db:"amount"`
+	Date     int    `json:"date" db:"date"`
 }
 
-// TradeElements ...
-type TradeElements struct {
-	TradeID  int    `json:"trade_id"`
-	Type     string `json:"type"`
-	Price    string `json:"price"`
-	Quantity string `json:"quantity"`
-	Amount   string `json:"amount"`
-	Date     int    `json:"date"`
+// OperationType ...
+type OperationType struct {
+	ID    int64  `json:"id" db:"id"`
+	Name  string `json:"name" db:"operation_type_name"`
+	Descr string `json:"description" db:"description"`
 }

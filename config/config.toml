@@ -1,5 +1,4 @@
 bind_addr = ":8080"
 log_level = "debug"
 
-[store]
 database_url = "postgres://root:docker@localhost:5432/gocryptotrader?sslmode=disable"
